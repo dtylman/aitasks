@@ -50,6 +50,38 @@ func (t *Task) Fix(ctx context.Context, req *Request, badTranslation string) (*R
 	return t.doFix(ctx, req, badTranslation)
 }
 
+// PopulateProject uses the LLM to fill in project context details (genre, synopsis,
+// writing style, glossary, characters) given a ProjectContext with Title and Author set.
+func (t *Task) PopulateProject(ctx context.Context, project *ProjectContext) (*ProjectContext, error) {
+	systemPrompt, err := prompts.Render("translate", "default", chat.RoleSystem, "populate_project", project)
+	if err != nil {
+		return nil, err
+	}
+	userPrompt, err := prompts.Render("translate", "default", chat.RoleUser, "populate_project", project)
+	if err != nil {
+		return nil, err
+	}
+
+	chatReq := &chat.Request{
+		Messages: []chat.Message{
+			{Role: chat.RoleSystem, Content: systemPrompt},
+			{Role: chat.RoleUser, Content: userPrompt},
+		},
+	}
+
+	var result ProjectContext
+	resp, err := chat.ChatInto(ctx, t.client, chatReq, &result)
+	if err != nil {
+		return nil, fmt.Errorf("populate project: %w, %v", err, resp.Content)
+	}
+
+	// Preserve the original title and author
+	result.Title = project.Title
+	result.Author = project.Author
+
+	return &result, nil
+}
+
 func (t *Task) doTranslate(ctx context.Context, req *Request) (*Result, error) {
 	if req.Text == "" {
 		return &Result{Translation: ""}, nil
