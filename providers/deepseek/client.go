@@ -10,8 +10,9 @@ import (
 
 // Client implements chat.Client using the DeepSeek API.
 type Client struct {
-	ds    *deepseek.Client
-	model string
+	ds       *deepseek.Client
+	model    string
+	thinking bool
 }
 
 // New creates a new DeepSeek chat client.
@@ -24,8 +25,9 @@ func New(cfg Config) (*Client, error) {
 		model = deepseek.DeepSeekChat
 	}
 	return &Client{
-		ds:    deepseek.NewClient(cfg.APIKey),
-		model: model,
+		ds:       deepseek.NewClient(cfg.APIKey),
+		model:    model,
+		thinking: cfg.Thinking,
 	}, nil
 }
 
@@ -50,6 +52,12 @@ func (c *Client) buildRequest(req *chat.Request) *deepseek.ChatCompletionRequest
 	dsReq := &deepseek.ChatCompletionRequest{
 		Model:    c.resolveModel(req.Model),
 		Messages: make([]deepseek.ChatCompletionMessage, 0, len(req.Messages)+1),
+	}
+
+	if c.thinking {
+		dsReq.Thinking = &deepseek.ThinkingConfig{Type: "enabled"}
+	} else {
+		dsReq.Thinking = &deepseek.ThinkingConfig{Type: "disabled"}
 	}
 
 	if req.Schema != nil {

@@ -72,7 +72,11 @@ func (t *Task) PopulateProject(ctx context.Context, project *ProjectContext) (*P
 	var result ProjectContext
 	resp, err := chat.ChatInto(ctx, t.client, chatReq, &result)
 	if err != nil {
-		return nil, fmt.Errorf("populate project: %w, %v", err, resp.Content)
+		content := ""
+		if resp != nil {
+			content = resp.Content
+		}
+		return nil, fmt.Errorf("populate project: %w, %v", err, content)
 	}
 
 	// Preserve the original title and author
