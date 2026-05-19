@@ -17,4 +17,9 @@ Glossary (ensure consistency with these terms):
 - {{$key}}: {{$value}}
 {{- end}}
 {{- end}}
+{{- if .ProjectContext.Instructions}}
+
+Additional Instructions:
+{{.ProjectContext.Instructions}}
+{{- end}}
 {{- end}}

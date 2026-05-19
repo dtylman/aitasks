@@ -7,4 +7,9 @@ Strict Academic Glossary Check:
 - {{$key}}: {{$value}}
 {{- end}}
 {{- end}}
+{{- if .TranslationReq.ProjectContext.Instructions}}
+
+Additional Instructions:
+{{.TranslationReq.ProjectContext.Instructions}}
+{{- end}}
 {{- end}}

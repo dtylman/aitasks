@@ -14,4 +14,9 @@ Verify that these glossary terms were used correctly:
 - {{$key}}: {{$value}}
 {{- end}}
 {{- end}}
+{{- if .TranslationReq.ProjectContext.Instructions}}
+
+Additional Instructions:
+{{.TranslationReq.ProjectContext.Instructions}}
+{{- end}}
 {{- end}}
