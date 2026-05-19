@@ -13,10 +13,9 @@ type Character struct {
 type ProjectContext struct {
 	Title        string            `json:"title" llm:"The title of the work being translated"`
 	Author       string            `json:"author" llm:"The author of the work being translated"`
-	Genre        string            `json:"genre" llm:"The genre of the work being translated"`
-	Synopsis     string            `json:"synopsis" llm:"A brief synopsis of the work being translated"`
-	WritingStyle string            `json:"writing_style" llm:"The writing style of the work being translated"`
-	Glossary     map[string]string `json:"glossary" llm:"A glossary of terms for the work being translated"`
+	Genre     string            `json:"genre" llm:"The genre of the work being translated"`
+	Synopsis  string            `json:"synopsis" llm:"A brief synopsis of the work being translated"`
+	Glossary  map[string]string `json:"glossary" llm:"A glossary of terms for the work being translated"`
 	Characters   []Character       `json:"characters" llm:"A list of characters in the work being translated"`
 }
 

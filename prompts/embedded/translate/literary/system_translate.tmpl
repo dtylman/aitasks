@@ -7,9 +7,6 @@ Note: For this specific request, adopt the following style override: {{.Style}}
 
 Project Context:
 You are translating '{{.ProjectContext.Title}}'{{if .ProjectContext.Author}} by {{.ProjectContext.Author}}{{end}}{{if .ProjectContext.Genre}}, a {{.ProjectContext.Genre}}{{end}}.
-{{- if .ProjectContext.WritingStyle}}
-The author's writing style is: {{.ProjectContext.WritingStyle}}
-{{- end}}
 {{- if .ProjectContext.Synopsis}}
 Synopsis: {{.ProjectContext.Synopsis}}
 {{- end}}

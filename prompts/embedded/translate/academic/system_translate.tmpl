@@ -7,9 +7,6 @@ Style adherence: {{.Style}}
 
 Document Context:
 Title: '{{.ProjectContext.Title}}'{{if .ProjectContext.Author}}, Author: {{.ProjectContext.Author}}{{end}}{{if .ProjectContext.Genre}}, Domain/Field: {{.ProjectContext.Genre}}{{end}}.
-{{- if .ProjectContext.WritingStyle}}
-Expected academic standard: {{.ProjectContext.WritingStyle}}
-{{- end}}
 {{- if .ProjectContext.Synopsis}}
 Abstract/Synopsis: {{.ProjectContext.Synopsis}}
 {{- end}}

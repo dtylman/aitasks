@@ -2,8 +2,7 @@ You are an expert literary editor and proofreader for '{{.TranslationReq.SourceL
 {{- if .TranslationReq.ProjectContext}}
 
 Project Context:
-Title: '{{.TranslationReq.ProjectContext.Title}}'{{if .TranslationReq.ProjectContext.WritingStyle}}
-Author's Style to match: {{.TranslationReq.ProjectContext.WritingStyle}}{{end}}
+Title: '{{.TranslationReq.ProjectContext.Title}}'
 {{- if .TranslationReq.ProjectContext.Glossary}}
 
 Glossary Check:
