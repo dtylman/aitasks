@@ -23,15 +23,33 @@ func ChatInto(ctx context.Context, c Client, req *Request, target any) (*Respons
 	}
 	req.Schema = schema
 
-	resp, err := c.Chat(ctx, req)
-	if err != nil {
-		return nil, err
+	maxRetries := req.MaxRetries
+	if maxRetries <= 0 {
+		maxRetries = 3
 	}
+	for attempt := range maxRetries {
+		resp, err := c.Chat(ctx, req)
+		if err != nil {
+			return nil, err
+		}
 
-	if err := json.Unmarshal([]byte(resp.Content), target); err != nil {
-		return resp, fmt.Errorf("decode response: %w", err)
+		err = json.Unmarshal([]byte(resp.Content), target)
+		if err != nil {
+			if attempt == maxRetries-1 {
+				return resp, fmt.Errorf("decode response: %w, %v", err, resp.Content)
+			}
+			log.Printf("ChatInto: decode error (attempt %d/%d): %v, retrying...", attempt+1, maxRetries, err)
+			// Append the failed exchange and ask the model to fix the JSON
+			req.Messages = append(req.Messages,
+				Message{Role: RoleAssistant, Content: resp.Content},
+				Message{Role: RoleUser, Content: fmt.Sprintf("Your response was not valid JSON: %v. Please return only valid JSON matching the schema.", err)},
+			)
+			continue
+		}
+		return resp, nil
 	}
-	return resp, nil
+	// unreachable
+	return nil, fmt.Errorf("ChatInto: exhausted retries")
 }
 
 func Chat(ctx context.Context, c Client, req *Request) (*Response, error) {

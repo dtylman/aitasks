@@ -25,6 +25,9 @@ type Request struct {
 	// Schema is set automatically by ChatInto. When non-nil, providers
 	// should request structured JSON output from the model.
 	Schema *JSONSchema
+	// MaxRetries is the number of retry attempts when JSON decode fails.
+	// If zero, defaults to 3.
+	MaxRetries int
 }
 
 // Response represents a chat completion response.
