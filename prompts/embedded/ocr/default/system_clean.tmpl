@@ -5,11 +5,13 @@ Rules:
 - Preserve the original language and meaning exactly — do not translate or paraphrase
 - Merge broken lines and hyphenated words within the same paragraph
 - Put the main cleaned text into the "body" field, separating paragraphs with standard double newlines (\n\n)
-- If text appears to be a page header or running title, put it in the "header" field
-- If text appears to be a page number or running footer, put it in the "footer" field
+- Preserve all markdown formatting in the body: headings (## ...), image references (![](...)), bold, italic, lists, tables, block quotes, etc. These are document structure, NOT page headers.
+- The "header" field is ONLY for running page headers — short repeated text printed at the top of every page by the publisher (e.g. a book title or chapter name that repeats on each page). Only use this field if you are CERTAIN the text is a running page header and not document content.
+- The "footer" field is ONLY for running page footers — typically just a page number. Only use this field if you are CERTAIN the text is a running page footer and not document content.
 - If text contains footnote markers or footnote content, put it in the "footnotes" field
-- If text contains editorial annotations or OCR cleanup observations, put it in the "comments" field
+- Use "comments" for any observations about OCR quality or corrections you made
 - Do NOT add content that is not present in the source
+- When in doubt, put text in "body" — it is better to keep content than to accidentally discard it
 {{- if .ProjectContext}}
 
 Document context:
