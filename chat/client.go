@@ -28,7 +28,7 @@ func ChatInto(ctx context.Context, c Client, req *Request, target any) (*Respons
 		maxRetries = 3
 	}
 	for attempt := range maxRetries {
-		resp, err := c.Chat(ctx, req)
+		resp, err := Chat(ctx, c, req)
 		if err != nil {
 			return nil, err
 		}
@@ -57,6 +57,14 @@ func Chat(ctx context.Context, c Client, req *Request) (*Response, error) {
 	if req.Schema != nil {
 		schemaType = req.Schema.Type
 	}
-	log.Printf("invoking %T:%v chat with %v:%v", c, req.Model, schemaType, len(req.Messages))
-	return c.Chat(ctx, req)
+	message := fmt.Sprintf("invoking %T:%v chat with %v:%v", c, req.Model, schemaType, len(req.Messages))
+	log.Println(message)
+	logChat(message, req)
+	resp, err := c.Chat(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	logChat("response", resp)
+	logChat("==============================================================", nil)
+	return resp, nil
 }
