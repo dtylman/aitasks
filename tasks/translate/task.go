@@ -10,8 +10,11 @@ import (
 
 // Task orchestrates translation workflows.
 type Task struct {
-	client        chat.Client
+	client chat.Client
+	//AutoProofread if true, automatically runs a proofreading step after translation to improve quality.
 	AutoProofread bool
+	//MaxRetries specifies how many times to retry the translation step on failure before giving up.
+	MaxRetries int
 }
 
 // New creates a new translation Task with the given client and options.
@@ -19,6 +22,7 @@ func New(client chat.Client) *Task {
 	t := &Task{
 		client:        client,
 		AutoProofread: true,
+		MaxRetries:    3,
 	}
 	return t
 }
@@ -107,6 +111,7 @@ func (t *Task) doTranslate(ctx context.Context, req *Request) (*Result, error) {
 			{Role: chat.RoleSystem, Content: systemPrompt},
 			{Role: chat.RoleUser, Content: userPrompt},
 		},
+		MaxRetries: t.MaxRetries,
 	}
 
 	var result Result
@@ -138,6 +143,7 @@ func (t *Task) doProofread(ctx context.Context, tr *Request, translation string)
 			{Role: chat.RoleSystem, Content: systemPrompt},
 			{Role: chat.RoleUser, Content: userPrompt},
 		},
+		MaxRetries: t.MaxRetries,
 	}
 
 	var result Result
@@ -169,6 +175,7 @@ func (t *Task) doFix(ctx context.Context, req *Request, badTranslation string) (
 			{Role: chat.RoleSystem, Content: systemPrompt},
 			{Role: chat.RoleUser, Content: userPrompt},
 		},
+		MaxRetries: t.MaxRetries,
 	}
 
 	var result Result
