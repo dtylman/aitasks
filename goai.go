@@ -31,3 +31,8 @@ func NewClient(vendor, model, apiKey string) (chat.Client, error) {
 		return nil, fmt.Errorf("unsupported vendor: %q", vendor)
 	}
 }
+
+// Vendors returns a list of supported vendor names for NewClient.
+func Vendors() []string {
+	return []string{"deepseek", "gemini", "ollama"}
+}
