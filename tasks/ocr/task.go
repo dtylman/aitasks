@@ -32,15 +32,11 @@ func (t *Task) Clean(ctx context.Context, req *Request) (*Response, error) {
 	if err != nil {
 		return nil, fmt.Errorf("render user prompt: %w", err)
 	}
+	var chatReq chat.Request
+	chatReq.AddMessage(provider.RoleSystem, systemPrompt)
+	chatReq.AddMessage(provider.RoleUser, userPrompt)
 
-	chatReq := &chat.Request{
-		Messages: []provider.Message{
-			{Role: provider.RoleSystem, Content: []provider.Part{{Text: systemPrompt}}},
-			{Role: provider.RoleUser, Content: []provider.Part{{Text: userPrompt}}},
-		},
-	}
-
-	resp, err := chat.ChatInto[Response](ctx, t.provider, chatReq)
+	resp, err := chat.ChatInto[Response](ctx, t.provider, &chatReq)
 	if err != nil {
 		return nil, fmt.Errorf("chat failed: %w, resp: %v", err, resp)
 	}

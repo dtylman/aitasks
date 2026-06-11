@@ -69,14 +69,11 @@ func (t *Task) PopulateProject(ctx context.Context, project *ProjectContext) (*P
 		return nil, err
 	}
 
-	chatReq := &chat.Request{
-		Messages: []provider.Message{
-			{Role: provider.RoleSystem, Content: []provider.Part{{Text: systemPrompt}}},
-			{Role: provider.RoleUser, Content: []provider.Part{{Text: userPrompt}}},
-		},
-	}
+	var chatReq chat.Request
+	chatReq.AddMessage(provider.RoleSystem, systemPrompt)
+	chatReq.AddMessage(provider.RoleUser, userPrompt)
 
-	resp, err := chat.ChatInto[ProjectContext](ctx, t.provider, chatReq)
+	resp, err := chat.ChatInto[ProjectContext](ctx, t.provider, &chatReq)
 	if err != nil {
 		return nil, fmt.Errorf("populate project: %w. resp: %v", err, resp)
 	}
