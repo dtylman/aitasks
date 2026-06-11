@@ -40,11 +40,10 @@ func (t *Task) Clean(ctx context.Context, req *Request) (*Response, error) {
 		},
 	}
 
-	var result Response
-	resp, err := chat.ChatInto(ctx, t.provider, chatReq, &result)
+	resp, err := chat.ChatInto[Response](ctx, t.provider, chatReq)
 	if err != nil {
 		return nil, fmt.Errorf("chat failed: %w, resp: %v", err, resp)
 	}
 
-	return &result, nil
+	return &resp.Object, nil
 }

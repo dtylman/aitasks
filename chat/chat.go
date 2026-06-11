@@ -10,8 +10,8 @@ import (
 
 // ChatInto generates a JSON schema from the target type, attaches it to
 // the request, calls Chat, and decodes the response into target.
-func ChatInto[T any](ctx context.Context, provider provider.LanguageModel, req *Request, target T) (*goai.ObjectResult[T], error) {
-	schema, err := NewJSONSchema(target)
+func ChatInto[T any](ctx context.Context, provider provider.LanguageModel, req *Request) (*goai.ObjectResult[T], error) {
+	schema, err := NewJSONSchema(new(T))
 	if err != nil {
 		return nil, fmt.Errorf("schema generation: %w", err)
 	}

@@ -76,17 +76,16 @@ func (t *Task) PopulateProject(ctx context.Context, project *ProjectContext) (*P
 		},
 	}
 
-	var result ProjectContext
-	resp, err := chat.ChatInto(ctx, t.provider, chatReq, &result)
+	resp, err := chat.ChatInto[ProjectContext](ctx, t.provider, chatReq)
 	if err != nil {
 		return nil, fmt.Errorf("populate project: %w. resp: %v", err, resp)
 	}
 
 	// Preserve the original title and author
-	result.Title = project.Title
-	result.Author = project.Author
+	resp.Object.Title = project.Title
+	resp.Object.Author = project.Author
 
-	return &result, nil
+	return &resp.Object, nil
 }
 
 func (t *Task) doTranslate(ctx context.Context, req *Request) (*Result, error) {
@@ -113,12 +112,11 @@ func (t *Task) doTranslate(ctx context.Context, req *Request) (*Result, error) {
 	}
 	chatReq.AddOption(goai.WithMaxRetries(t.MaxRetries))
 
-	var result Result
-	resp, err := chat.ChatInto(ctx, t.provider, chatReq, &result)
+	resp, err := chat.ChatInto[Result](ctx, t.provider, chatReq)
 	if err != nil {
 		return nil, fmt.Errorf("failed to translate: %w, resp: %v:", err, resp)
 	}
-	return &result, nil
+	return &resp.Object, nil
 }
 
 func (t *Task) doProofread(ctx context.Context, tr *Request, translation string) (*Result, error) {
@@ -145,13 +143,12 @@ func (t *Task) doProofread(ctx context.Context, tr *Request, translation string)
 	}
 	chatReq.AddOption(goai.WithMaxRetries(t.MaxRetries))
 
-	var result Result
-	resp, err := chat.ChatInto(ctx, t.provider, chatReq, &result)
+	resp, err := chat.ChatInto[Result](ctx, t.provider, chatReq)
 	if err != nil {
 		return nil, fmt.Errorf("proofread: %w, resp: %v", err, resp)
 	}
 
-	return &result, nil
+	return &resp.Object, nil
 }
 
 func (t *Task) doFix(ctx context.Context, req *Request, badTranslation string) (*Result, error) {
@@ -177,11 +174,10 @@ func (t *Task) doFix(ctx context.Context, req *Request, badTranslation string) (
 	}
 	chatReq.AddOption(goai.WithMaxRetries(t.MaxRetries))
 
-	var result Result
-	resp, err := chat.ChatInto(ctx, t.provider, chatReq, &result)
+	resp, err := chat.ChatInto[Result](ctx, t.provider, chatReq)
 	if err != nil {
 		return nil, fmt.Errorf("fix: %w, resp: %v", err, resp)
 	}
 
-	return &result, nil
+	return &resp.Object, nil
 }
