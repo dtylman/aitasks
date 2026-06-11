@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/dtylman/goai/chat"
-	"github.com/dtylman/goai/prompts"
+	"github.com/dtylman/aitasks/chat"
+	"github.com/dtylman/aitasks/prompts"
 )
 
 // Task orchestrates translation workflows.

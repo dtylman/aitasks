@@ -9,7 +9,7 @@ import (
 	"log"
 	"path"
 
-	"github.com/dtylman/goai/chat"
+	"github.com/dtylman/aitasks/chat"
 )
 
 //go:embed embedded

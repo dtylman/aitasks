@@ -1,4 +1,4 @@
-module github.com/dtylman/goai
+module github.com/dtylman/aitasks
 
 go 1.25.1
 

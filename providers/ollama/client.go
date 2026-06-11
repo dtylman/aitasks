@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/dtylman/goai/chat"
+	"github.com/dtylman/aitasks/chat"
 	"github.com/ollama/ollama/api"
 )
 

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/dtylman/goai/chat"
+	"github.com/dtylman/aitasks/chat"
 )
 
 func TestNewJSONSchema_SimpleStruct(t *testing.T) {

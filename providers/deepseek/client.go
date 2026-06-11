@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/cohesion-org/deepseek-go"
-	"github.com/dtylman/goai/chat"
+	"github.com/dtylman/aitasks/chat"
 )
 
 // Client implements chat.Client using the DeepSeek API.

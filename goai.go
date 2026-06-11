@@ -1,12 +1,12 @@
-package goai
+package aitasks
 
 import (
 	"fmt"
 
-	"github.com/dtylman/goai/chat"
-	"github.com/dtylman/goai/providers/deepseek"
-	"github.com/dtylman/goai/providers/gemini"
-	"github.com/dtylman/goai/providers/ollama"
+	"github.com/dtylman/aitasks/chat"
+	"github.com/dtylman/aitasks/providers/deepseek"
+	"github.com/dtylman/aitasks/providers/gemini"
+	"github.com/dtylman/aitasks/providers/ollama"
 )
 
 // NewClient creates a chat.Client from a vendor name, model, and API key.

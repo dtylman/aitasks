@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/dtylman/goai/chat"
+	"github.com/dtylman/aitasks/chat"
 )
 
 type mockClient struct {
