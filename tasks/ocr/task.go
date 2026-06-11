@@ -6,47 +6,44 @@ import (
 
 	"github.com/dtylman/aitasks/chat"
 	"github.com/dtylman/aitasks/prompts"
+	"github.com/zendev-sh/goai/provider"
 )
 
 // Task orchestrates OCR text cleanup.
 type Task struct {
-	client chat.Client
+	provider provider.LanguageModel
 }
 
-// New creates a new OCR cleanup Task with the given client and options.
-func New(client chat.Client) *Task {
+// New creates a new OCR cleanup Task with the given provider.
+func New(provider provider.LanguageModel) *Task {
 	t := &Task{
-		client: client,
+		provider: provider,
 	}
 	return t
 }
 
 // Clean processes raw OCR segments and returns structured, cleaned text.
 func (t *Task) Clean(ctx context.Context, req *Request) (*Response, error) {
-	systemPrompt, err := prompts.Render("ocr", "default", chat.RoleSystem, "clean", req)
+	systemPrompt, err := prompts.Render("ocr", "default", provider.RoleSystem, "clean", req)
 	if err != nil {
 		return nil, fmt.Errorf("render system prompt: %w", err)
 	}
-	userPrompt, err := prompts.Render("ocr", "default", chat.RoleUser, "clean", req)
+	userPrompt, err := prompts.Render("ocr", "default", provider.RoleUser, "clean", req)
 	if err != nil {
 		return nil, fmt.Errorf("render user prompt: %w", err)
 	}
 
 	chatReq := &chat.Request{
-		Messages: []chat.Message{
-			{Role: chat.RoleSystem, Content: systemPrompt},
-			{Role: chat.RoleUser, Content: userPrompt},
+		Messages: []provider.Message{
+			{Role: provider.RoleSystem, Content: []provider.Part{{Text: systemPrompt}}},
+			{Role: provider.RoleUser, Content: []provider.Part{{Text: userPrompt}}},
 		},
 	}
 
 	var result Response
-	resp, err := chat.ChatInto(ctx, t.client, chatReq, &result)
+	resp, err := chat.ChatInto(ctx, t.provider, chatReq, &result)
 	if err != nil {
-		content := ""
-		if resp != nil {
-			content = resp.Content
-		}
-		return nil, fmt.Errorf("chat failed: %v, response: '%v'", err, content)
+		return nil, fmt.Errorf("chat failed: %w, resp: %v", err, resp)
 	}
 
 	return &result, nil

@@ -1,37 +1,21 @@
 package chat
 
-// Role represents the role of a message sender in a conversation.
-type Role string
-
-const (
-	RoleSystem    Role = "system"
-	RoleUser      Role = "user"
-	RoleAssistant Role = "assistant"
-	RoleTool      Role = "tool"
+import (
+	"github.com/zendev-sh/goai"
+	"github.com/zendev-sh/goai/provider"
 )
-
-// Message represents a single message in a conversation.
-type Message struct {
-	Role    Role
-	Content string
-}
 
 // Request represents a chat completion request.
 type Request struct {
-	// Model optionally overrides the provider's default model.
-	Model string
 	// Messages is the conversation history.
-	Messages []Message
-	// Schema is set automatically by ChatInto. When non-nil, providers
-	// should request structured JSON output from the model.
-	Schema *JSONSchema
-	// MaxRetries is the number of retry attempts when JSON decode fails.
-	// If zero, defaults to 3.
-	MaxRetries int
+	Messages []provider.Message
+	// Opts more options
+	Options []goai.Option
 }
 
-// Response represents a chat completion response.
-type Response struct {
-	// Content is the generated text from the model.
-	Content string
+func (r *Request) AddOption(opt goai.Option) {
+	if r.Options == nil {
+		r.Options = []goai.Option{}
+	}
+	r.Options = append(r.Options, opt)
 }

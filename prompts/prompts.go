@@ -9,14 +9,14 @@ import (
 	"log"
 	"path"
 
-	"github.com/dtylman/aitasks/chat"
+	"github.com/zendev-sh/goai/provider"
 )
 
 //go:embed embedded
 var embeddedFS embed.FS
 
 // Render renders a prompt template for the given task, style, and name, using the provided parameters.
-func Render(task string, style string, role chat.Role, name string, params any) (string, error) {
+func Render(task string, style string, role provider.Role, name string, params any) (string, error) {
 	path := path.Join("embedded", task, style, fmt.Sprintf("%v_%v.tmpl", role, name))
 	log.Printf("Loading prompt template from %v", path)
 	content, err := embeddedFS.ReadFile(path)
