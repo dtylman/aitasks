@@ -26,12 +26,14 @@ func (r *Request) AddMessage(role provider.Role, content string) {
 	if r.Messages == nil {
 		r.Messages = []provider.Message{}
 	}
-	r.Messages = append(r.Messages, provider.Message{
+	message := provider.Message{
 		Role: role,
 		Content: []provider.Part{
-			{Text: content,
+			{
+				Text: content,
 				Type: provider.PartText,
 			},
 		},
-	})
+	}
+	r.Messages = append(r.Messages, message)
 }

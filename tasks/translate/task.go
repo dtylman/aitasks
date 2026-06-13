@@ -69,11 +69,9 @@ func (t *Task) PopulateProject(ctx context.Context, project *ProjectContext) (*P
 		return nil, err
 	}
 
-	var chatReq chat.Request
-	chatReq.AddMessage(provider.RoleSystem, systemPrompt)
-	chatReq.AddMessage(provider.RoleUser, userPrompt)
+	chatReq := t.newChatRequest(systemPrompt, userPrompt)
 
-	resp, err := chat.ChatInto[ProjectContext](ctx, t.provider, &chatReq)
+	resp, err := chat.ChatInto[ProjectContext](ctx, t.provider, chatReq)
 	if err != nil {
 		return nil, fmt.Errorf("populate project: %w. resp: %v", err, resp)
 	}
@@ -101,13 +99,7 @@ func (t *Task) doTranslate(ctx context.Context, req *Request) (*Result, error) {
 		return nil, err
 	}
 
-	chatReq := &chat.Request{
-		Messages: []provider.Message{
-			{Role: provider.RoleSystem, Content: []provider.Part{{Text: systemPrompt}}},
-			{Role: provider.RoleUser, Content: []provider.Part{{Text: userPrompt}}},
-		},
-	}
-	chatReq.AddOption(goai.WithMaxRetries(t.MaxRetries))
+	chatReq := t.newChatRequest(systemPrompt, userPrompt)
 
 	resp, err := chat.ChatInto[Result](ctx, t.provider, chatReq)
 	if err != nil {
@@ -132,13 +124,7 @@ func (t *Task) doProofread(ctx context.Context, tr *Request, translation string)
 		return nil, err
 	}
 
-	chatReq := &chat.Request{
-		Messages: []provider.Message{
-			{Role: provider.RoleSystem, Content: []provider.Part{{Text: systemPrompt}}},
-			{Role: provider.RoleUser, Content: []provider.Part{{Text: userPrompt}}},
-		},
-	}
-	chatReq.AddOption(goai.WithMaxRetries(t.MaxRetries))
+	chatReq := t.newChatRequest(systemPrompt, userPrompt)
 
 	resp, err := chat.ChatInto[Result](ctx, t.provider, chatReq)
 	if err != nil {
@@ -163,13 +149,7 @@ func (t *Task) doFix(ctx context.Context, req *Request, badTranslation string) (
 		return nil, err
 	}
 
-	chatReq := &chat.Request{
-		Messages: []provider.Message{
-			{Role: provider.RoleSystem, Content: []provider.Part{{Text: systemPrompt}}},
-			{Role: provider.RoleUser, Content: []provider.Part{{Text: userPrompt}}},
-		},
-	}
-	chatReq.AddOption(goai.WithMaxRetries(t.MaxRetries))
+	chatReq := t.newChatRequest(systemPrompt, userPrompt)
 
 	resp, err := chat.ChatInto[Result](ctx, t.provider, chatReq)
 	if err != nil {
@@ -177,4 +157,12 @@ func (t *Task) doFix(ctx context.Context, req *Request, badTranslation string) (
 	}
 
 	return &resp.Object, nil
+}
+
+func (t *Task) newChatRequest(systemPrompt, userPrompt string) *chat.Request {
+	var chatReq chat.Request
+	chatReq.AddMessage(provider.RoleSystem, systemPrompt)
+	chatReq.AddMessage(provider.RoleUser, userPrompt)
+	chatReq.AddOption(goai.WithMaxRetries(t.MaxRetries))
+	return &chatReq
 }
