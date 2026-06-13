@@ -1,4 +1,6 @@
 github.com/zendev-sh/goai v0.8.3 h1:MpKk60MK/xMKjcJJ+sgpQExFoRlVJ3NeY2kJbzDKuCA=
 github.com/zendev-sh/goai v0.8.3/go.mod h1:F0NPGQu0kzKQOQ0/pWYJ4E3J0EY2TBa+uEvqgOPsSaY=
+github.com/zendev-sh/goai v0.8.4 h1:yw4T26E13oFuVd87CmEQmoY4rH/+kuvn7R+6lPOK2aY=
+github.com/zendev-sh/goai v0.8.4/go.mod h1:F0NPGQu0kzKQOQ0/pWYJ4E3J0EY2TBa+uEvqgOPsSaY=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
 go.uber.org/goleak v1.3.0/go.mod h1:CoHD4mav9JJNrW/WLlf7HGZPjdw8EucARQHekz1X6bE=
