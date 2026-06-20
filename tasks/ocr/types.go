@@ -8,10 +8,17 @@ type ProjectContext struct {
 	Synopsis string `json:"synopsis" llm:"A brief summary of the document"`
 }
 
+// PageContext provides free-form metadata about the specific text segment being processed,
+// such as its position on the page, font information, or visual role.
+type PageContext struct {
+	Description string `json:"description" llm:"Free-form description of the text segment's context on the page"`
+}
+
 // Request represents a request to clean OCR text.
 type Request struct {
 	Text           string          `json:"text" llm:"The raw OCR text to be cleaned"`
 	ProjectContext *ProjectContext `json:"project_context,omitempty" llm:"Metadata about the document being processed"`
+	PageContext    *PageContext    `json:"page_context,omitempty" llm:"Metadata about the specific text segment's position and appearance on the page"`
 }
 
 // Response represents cleaned and structured OCR output.
